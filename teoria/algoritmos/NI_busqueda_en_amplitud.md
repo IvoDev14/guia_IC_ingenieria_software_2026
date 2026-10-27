@@ -1,13 +1,14 @@
 # Búsqueda en Amplitud
 
-> Estado: *1.0*
-> Última modificación: *26/10/26*
+> Estado: *1.1*
+> Última modificación: *27/10/26*
 
 ## Características
 
 Completo *si existe una solución, este algoritmo la encuentra*
 Óptimo (solo para operadores de coste uno) *si hay varias soluciones encuentra la más óptima*
 Complejidad exponencial tanto en tiempo como en espacio (incluso en el mejor de los casos)
+Búsqueda no informada
 
 ## Pseudocódigo explicado
 
