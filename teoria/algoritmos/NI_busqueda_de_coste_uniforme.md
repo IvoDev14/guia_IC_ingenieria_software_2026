@@ -1,6 +1,6 @@
 # Búsqueda de Coste Uniforme
 
-> Versión: *borrador*
+> Versión: *1.0*
 > Última modificación: *27/10/26*
 
 ## Características
