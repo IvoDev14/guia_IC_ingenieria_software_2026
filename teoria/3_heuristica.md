@@ -38,7 +38,7 @@ Un ejemplo clar sería en navegación de rutas -> la distancia en línea recta h
 
 #### Monotonía
 
-Una función heurística es monotona <-> para todo nodo n_i y cualquier sucesor directo n_j, la diferencia de estimacuón no supera el coste del paso c(n_i, n_j)
+Una función heurística es monotona/consistente <-> para todo nodo n_i y cualquier sucesor directo n_j, la diferencia de estimacuón no supera el coste del paso c(n_i, n_j)
 
 Es decir -> h*(n_i) - h*(n_j) <= c(n_i, n_j) -> se podría decir malamente para entederlo mejor como que el coste de un nodo al otro calculandolo con las distancias estimadas a la meta, sea menor o igual que el coste real de un nodo a otro
 
