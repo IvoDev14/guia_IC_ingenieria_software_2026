@@ -1,6 +1,6 @@
 # Heurística Avanzada
 
-> Versión: *borrador*
+> Versión: *1.0*
 > Última modificación: *5/11/26*
 
 En este documento trataremos el tema de la heurística avanzada para dominar y entender los conceptos de teoría
