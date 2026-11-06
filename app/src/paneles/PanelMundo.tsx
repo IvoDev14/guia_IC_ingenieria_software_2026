@@ -1,8 +1,9 @@
 import { camino } from '../core/traza'
 import { useFoco, useFoto, useReproductor } from '../reproductor/store'
 import { Panel } from '../ui/Panel'
+import { AbiertaDesplegable } from './PanelPasos'
 
-/** Muestra el "mundo real" del problema usando la vista que aporta cada ejemplo. */
+/** Muestra el "mundo real" del problema (vista que aporta cada ejemplo) con la lista abierta encima. */
 export function PanelMundo() {
   const ejemplo = useReproductor((s) => s.ejemplo)
   const seleccionado = useReproductor((s) => s.seleccionado)
@@ -34,9 +35,11 @@ export function PanelMundo() {
         )
       }
     >
-      <div className="absolute inset-0 px-2 pb-2">
+      {/* El mundo deja hueco abajo para la tira de abierta plegada */}
+      <div className="absolute inset-x-0 top-0 bottom-12 px-2">
         <Mundo problema={problema} foto={foto} foco={foco} />
       </div>
+      <AbiertaDesplegable />
     </Panel>
   )
 }

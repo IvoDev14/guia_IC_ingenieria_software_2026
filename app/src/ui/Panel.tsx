@@ -25,7 +25,7 @@ export function Panel({
 
 export function Leyenda({ colores }: { colores: Color[] }) {
   return (
-    <div className="flex min-w-0 flex-wrap justify-end gap-x-3 gap-y-1 text-[11px] text-slate-500">
+    <div className="flex min-w-0 flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-500">
       {colores.map((c) => (
         <span key={c.nombre} className="flex items-center gap-1.5">
           <span className="inline-block h-2.5 w-2.5 rounded-[3px] border" style={{ background: c.relleno, borderColor: c.borde }} />
@@ -36,10 +36,10 @@ export function Leyenda({ colores }: { colores: Color[] }) {
   )
 }
 
-export function Tecla({ children, oscura = false }: { children: ReactNode; oscura?: boolean }) {
+export function Tecla({ children, oscura = false, siempre = false }: { children: ReactNode; oscura?: boolean; siempre?: boolean }) {
   const estilo = oscura ? 'border-white/20 bg-white/10 text-white/70' : 'border-slate-200 bg-slate-50 text-slate-400'
   return (
-    <kbd className={`hidden rounded border px-1 font-sans text-[10px] leading-4 font-medium xl:inline ${estilo}`}>
+    <kbd className={`${siempre ? 'inline' : 'hidden xl:inline'} rounded border px-1 font-sans text-[10px] leading-4 font-medium ${estilo}`}>
       {children}
     </kbd>
   )

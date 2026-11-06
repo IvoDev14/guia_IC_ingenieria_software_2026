@@ -1,15 +1,23 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import { ArbolBusqueda } from './paneles/ArbolBusqueda'
-import { Abierta, Historial, Pseudocodigo } from './paneles/PanelPasos'
+import { Historial } from './paneles/Historial'
+import { Info } from './paneles/Info'
+import { Pseudocodigo } from './paneles/PanelPasos'
 import { PanelMundo } from './paneles/PanelMundo'
 import { algoritmos, buscarAlgoritmo, ejemplosDe } from './registro'
-import { Controles } from './reproductor/Controles'
+import { BarraPasos, LineaTiempo } from './reproductor/Controles'
 import { useAtajos, useReproduccionAutomatica } from './reproductor/hooks'
 import { useReproductor } from './reproductor/store'
 import { navegar, useRuta } from './ruta'
-import { IconoInfo } from './ui/iconos'
+import { IconoHistorial, IconoInfo } from './ui/iconos'
+import { BarraActividad, BarraLateral, type DefVistaLateral } from './ui/Lateral'
 
 const TIPOS = { 'no-informada': 'No informada', informada: 'Informada' } as const
+
+const VISTAS_LATERALES: DefVistaLateral[] = [
+  { id: 'historial', titulo: 'Historial', Icono: IconoHistorial, Contenido: Historial },
+  { id: 'info', titulo: 'Sobre el algoritmo', Icono: IconoInfo, Contenido: Info },
+]
 
 export default function App() {
   const { algoritmoId, ejemploId } = useRuta()
@@ -18,6 +26,7 @@ export default function App() {
   const ejemplo = ejemplos.find((e) => e.id === ejemploId)
   const cargar = useReproductor((s) => s.cargar)
   const cargado = useReproductor((s) => s.ejemplo)
+  const listo = cargado !== null && cargado === ejemplo
 
   useAtajos()
   useReproduccionAutomatica()
@@ -34,17 +43,19 @@ export default function App() {
   }, [algoritmo, ejemplo, cargar])
 
   return (
-    <div className="flex min-h-dvh flex-col bg-slate-100 text-slate-900 lg:h-dvh">
-      <header className="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-2 border-b border-slate-200 bg-white px-4 py-2.5">
-        <div className="flex items-center gap-2.5">
+    // Dashboard de escritorio: ocupa exactamente la ventana y la página nunca se desplaza;
+    // solo hacen scroll, si lo necesitan, los paneles por dentro.
+    <div className="flex h-dvh min-w-[960px] flex-col overflow-hidden bg-slate-100 text-slate-900">
+      <header className="flex h-12 shrink-0 items-center gap-4 bg-white px-3">
+        <div className="flex shrink-0 items-center gap-2.5">
           <img src="./favicon.svg" alt="" className="h-7 w-7" />
-          <div className="leading-tight">
-            <h1 className="text-sm font-semibold">Algoritmos de búsqueda</h1>
-            <p className="text-[11px] text-slate-500">Ingeniería del Conocimiento</p>
-          </div>
+          <h1 className="hidden text-sm leading-tight font-semibold 2xl:block">
+            Algoritmos de búsqueda
+            <span className="block text-[11px] font-normal text-slate-500">Ingeniería del Conocimiento</span>
+          </h1>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
           <Selector etiqueta="Algoritmo" valor={algoritmo?.id ?? ''} alCambiar={(id) => navegar(id)}>
             {Object.entries(TIPOS).map(([tipo, nombre]) => {
               const delTipo = algoritmos.filter((a) => a.tipo === tipo)
@@ -65,91 +76,52 @@ export default function App() {
             ))}
           </Selector>
           {algoritmo && (
-            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">{TIPOS[algoritmo.tipo]}</span>
+            <span className="hidden shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600 xl:inline">{TIPOS[algoritmo.tipo]}</span>
           )}
         </div>
 
-        {algoritmo && <Info titulo={algoritmo.nombre} resumen={algoritmo.resumen} caracteristicas={algoritmo.caracteristicas} ejemplo={ejemplo?.descripcion} />}
+        <div className="ml-auto shrink-0">{listo && <BarraPasos />}</div>
       </header>
+      {listo ? <LineaTiempo /> : <div className="h-2.5 shrink-0 border-b border-slate-200 bg-white" />}
 
-      {algoritmo && ejemplos.length === 0 && <p className="p-4 text-sm text-slate-500">Este algoritmo todavía no tiene ejemplos.</p>}
+      <div className="flex min-h-0 flex-1">
+        <BarraActividad vistas={VISTAS_LATERALES} />
+        {listo && <BarraLateral vistas={VISTAS_LATERALES} />}
 
-      {cargado && cargado === ejemplo && (
-        <main className="grid min-h-0 flex-1 gap-2.5 p-2.5 lg:grid-cols-[22rem_minmax(0,1fr)] xl:grid-cols-[25rem_minmax(0,1fr)]">
-          <div className="flex min-h-0 flex-col gap-2.5 lg:overflow-y-auto">
-            <Controles />
-            <Pseudocodigo />
-            <Abierta />
-            <Historial />
-          </div>
-          <div className="grid min-h-0 gap-2.5 lg:grid-rows-[minmax(0,5fr)_minmax(0,6fr)]">
-            <div className="h-80 min-h-0 lg:h-auto">
-              <PanelMundo />
+        <main className="min-h-0 min-w-0 flex-1 p-2.5">
+          {algoritmo && ejemplos.length === 0 && <p className="p-2 text-sm text-slate-500">Este algoritmo todavía no tiene ejemplos.</p>}
+
+          {listo && (
+            // Izquierda: pseudocódigo arriba y mundo abajo. Derecha: árbol a toda la altura.
+            <div className="grid h-full grid-cols-[minmax(0,5fr)_minmax(0,7fr)] grid-rows-[minmax(0,1.1fr)_minmax(0,1fr)] gap-2.5">
+              <div className="min-h-0">
+                <Pseudocodigo />
+              </div>
+              <div className="row-span-2 min-h-0">
+                <ArbolBusqueda />
+              </div>
+              <div className="min-h-0">
+                <PanelMundo />
+              </div>
             </div>
-            <div className="h-[28rem] min-h-0 lg:h-auto">
-              <ArbolBusqueda />
-            </div>
-          </div>
+          )}
         </main>
-      )}
+      </div>
     </div>
   )
 }
 
 function Selector({ etiqueta, valor, alCambiar, children }: { etiqueta: string; valor: string; alCambiar: (v: string) => void; children: React.ReactNode }) {
   return (
-    <label className="flex items-center rounded-lg bg-slate-100 pl-2.5 text-xs text-slate-500 ring-1 ring-slate-200 focus-within:ring-slate-400">
-      {etiqueta}
+    <label className="flex min-w-0 items-center rounded-lg bg-slate-100 pl-2.5 text-xs text-slate-500 ring-1 ring-slate-200 focus-within:ring-slate-400">
+      <span className="shrink-0">{etiqueta}</span>
       <select
-        className="cursor-pointer rounded-r-lg bg-transparent py-1.5 pr-2 pl-2 text-sm font-medium text-slate-900 outline-none"
+        className="max-w-56 min-w-0 cursor-pointer truncate rounded-r-lg bg-transparent py-1.5 pr-2 pl-2 text-sm font-medium text-slate-900 outline-none"
         value={valor}
         onChange={(e) => alCambiar(e.target.value)}
       >
         {children}
       </select>
     </label>
-  )
-}
-
-/** Botón que despliega la descripción del algoritmo y del ejemplo. */
-function Info({ titulo, resumen, caracteristicas, ejemplo }: { titulo: string; resumen: string; caracteristicas: string[]; ejemplo?: string }) {
-  const [abierto, setAbierto] = useState(false)
-  const caja = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!abierto) return
-    const cerrar = (e: MouseEvent) => {
-      if (!caja.current?.contains(e.target as Node)) setAbierto(false)
-    }
-    document.addEventListener('mousedown', cerrar)
-    return () => document.removeEventListener('mousedown', cerrar)
-  }, [abierto])
-
-  return (
-    <div ref={caja} className="relative ml-auto">
-      <button
-        onClick={() => setAbierto(!abierto)}
-        className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium transition ${abierto ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'}`}
-      >
-        <IconoInfo /> Sobre el algoritmo
-      </button>
-      {abierto && (
-        <div className="absolute right-0 z-20 mt-2 w-[min(26rem,calc(100vw-2rem))] rounded-xl bg-white p-4 text-sm shadow-lg ring-1 ring-slate-200">
-          <h3 className="font-semibold">{titulo}</h3>
-          <p className="mt-1 text-slate-600">{resumen}</p>
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {caracteristicas.map((c) => (
-              <span key={c} className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-700">{c}</span>
-            ))}
-          </div>
-          {ejemplo && (
-            <>
-              <h4 className="mt-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400">Ejemplo</h4>
-              <p className="mt-1 text-slate-600">{ejemplo}</p>
-            </>
-          )}
-        </div>
-      )}
-    </div>
   )
 }

@@ -85,7 +85,6 @@ export function ArbolBusqueda() {
       className="h-full"
       extra={
         <div className="flex min-w-0 items-center gap-3">
-          <Leyenda colores={Object.values(COLORES)} />
           {!siguiendo && (
             <button
               onClick={() => setSiguiendo(true)}
@@ -155,6 +154,9 @@ export function ArbolBusqueda() {
             </svg>
           </TransformComponent>
         </TransformWrapper>
+        <div className="pointer-events-none absolute bottom-2 left-2 rounded-lg bg-white/90 px-2.5 py-1.5 shadow-sm ring-1 ring-slate-200 backdrop-blur">
+          <Leyenda colores={Object.values(COLORES)} />
+        </div>
       </div>
     </Panel>
   )

@@ -17,3 +17,4 @@ export const IconoPlay = () => <Icono d="M6.5 4.5v11l9-5.5z" fill="currentColor"
 export const IconoPausa = () => <Icono d="M7 4.5v11M13 4.5v11" strokeWidth={2.4} />
 export const IconoInfo = () => <Icono d="M10 17.5a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15ZM10 9v4.5M10 6.5v.01" />
 export const IconoCentrar = () => <Icono d="M10 3v3M10 14v3M3 10h3M14 10h3M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+export const IconoHistorial = () => <Icono d="M3.5 10a6.5 6.5 0 1 0 1.9-4.6M3.5 3.5v3h3M10 6.5V10l2.5 1.5" />
