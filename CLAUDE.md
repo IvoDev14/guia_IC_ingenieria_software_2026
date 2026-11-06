@@ -72,7 +72,7 @@ Reglas de interfaz:
 - Nunca usar `scrollIntoView` (mueve también la página). El historial ajusta solo su propio `scrollTop` y deja de seguir el paso actual si el usuario sube.
 - El árbol se dibuja a tamaño natural dentro de `react-zoom-pan-pinch` y la cámara (`setTransform`) sigue al nodo en foco. Si el usuario arrastra o hace zoom, deja de seguirlo hasta que pulsa "Seguir nodo". `setTransform` se lanza dos frames después del cambio, porque el ResizeObserver de la librería cancela las animaciones del frame en que cambia el tamaño del SVG.
 
-Para añadir un algoritmo: crear `src/algoritmos/x.ts`, registrarlo en `registro.ts` y darle al menos un ejemplo. Para añadir un problema: crear `src/problemas/x/` con modelo, `Mundo` y ejemplos. En ambos casos conviene añadir un test que compruebe el orden de expansión esperado (como en clase).
+Para añadir un ejemplo, un algoritmo (del método general o con estructura propia) o un problema nuevo, sigue el tutorial del `README.md` (sección 4), que incluye código de partida, una plantilla de test y una lista de comprobación final.
 
 La búsqueda no controla estados repetidos (como en los apuntes), así que una ciudad puede aparecer varias veces en el árbol. `maxNodos` (500 por defecto) corta árboles infinitos con un evento `limite`.
 
