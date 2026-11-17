@@ -1,0 +1,3 @@
+En esta carpeta estarán definidos todos los modelos/tipos aprendidos en la asignatura. Puestos como se definirían en código (especificamente en TypeScript) y explicados, para tener todas las definiciones mostradas de otra manera que pueden ayudar a comprender mejor, o a tener más a mano las definiciones una vez ya entendidas.
+
+Usaré TypeScript ya que para definición de tipos es uno de los lenguajes más robustos.
