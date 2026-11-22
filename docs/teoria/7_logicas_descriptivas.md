@@ -1,4 +1,4 @@
-> Version: *borrador*
+> Version: *1.0*
 > Última modificación: *17/11/26*
 
 Este tema es importante ya sirve para entender como se formaliza el conocimiento mediante lógicas descriptivas, y esto se usa en web semántica (el siguiente tema).
@@ -57,11 +57,13 @@ Una interpretación $\mathcal{I} = (\Delta^\mathcal{I}, \cdot^\mathcal{I})$ defi
 
 #### Bases del Conocimiento (BC)
 
+Las bases del Conocimiento describen "normas" de situaciones, ya sean generales o específicas (por ejemplo decir que una empresa no puede ser una persona, o que "Ana" es una persona)
+
 Una base del conocimiento $K$ suele dividirse en dos componentes $K=<\mathcal T, \mathcal A>$ siendo:
 
 - **TBox** (Terminological KB - "Vocabulario"): un conjunto de axiomas que describen la estructura de un dominio (como equivalencias o normas del tipo Empresa no es una Persona o Empresario es una Persona que posee una Empresa).
 	
-	- **Inclusión de conceptos (Subsunción):** $C \sqsubseteq D$ si $C^\mathcal{I} \subseteq D^\mathcal{I}$  _"Todo_ $C$ _es un_ $D$_"_.
+	- **Inclusión de conceptos:** $C \sqsubseteq D$ si $C^\mathcal{I} \subseteq D^\mathcal{I}$  _"Todo_ $C$ _es un_ $D$_"_.
 	- **Equivalencia / Definición:** $C \equiv D$ si $C \sqsubseteq D$ y $D \sqsubseteq C$, es decir, $C^\mathcal{I} = D^\mathcal{I}$
 
 - **ABox** (Assertional KB - "Hechos del Mundo"): conjunto de axiomas que describen una situación concreta (es decir, por ejemplo describen a un invidúo $a$ de la forma Persona($a$)):
@@ -70,3 +72,9 @@ Una base del conocimiento $K$ suele dividirse en dos componentes $K=<\mathcal T,
 		- $C(a)$ si $a^\mathcal I \in C^\mathcal I$ un individuo $a$ es un concepto $C$ por ejemplo siendo $C$ persona y $a$ Ana -> $C(a)$ Ana es una persona
 	- **Aserción de roles**: $r(a,b)$ 
 		- $r(a,b)$ si $<a, b> \in r^\mathcal I$ por ejemplo siendo $r$ trabajaPara y $r^\mathcal = \{<Ana, Marcos>, <Sergio, Hector>\}$ entonces $r(Ana, Marcos)$ 
+
+##### Inferencia
+
+El objetivo de la inferencia de las Lógicas de Descripciones es, dada una BC $K = <T,A>$, deducir conocimiento implícito (es decir que queda reflejado en la BC pero que por lo que hay en la BC es así) a partir de lo definido explícitcamente.
+
+Pondré los mecanismos de razonamiento en un fichero aparte.
